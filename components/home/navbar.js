@@ -1,5 +1,6 @@
-import { Group, Button, Box, Title } from '@mantine/core';
+import { Group, Button, Title } from '@mantine/core';
 import classes from './navbar.module.css';
+import Link from 'next/link';
 
 export function Navbar() {
 	return (
@@ -8,8 +9,12 @@ export function Navbar() {
 				<Title order={2}>Final Project</Title>
 
 				<Group>
-					<Button variant="default">Log in</Button>
-					<Button>Sign up</Button>
+					<Link href="/login">
+						<Button variant="default">Log in</Button>
+					</Link>
+					<Link href="/signup">
+						<Button>Sign up</Button>
+					</Link>
 				</Group>
 			</Group>
 		</header>

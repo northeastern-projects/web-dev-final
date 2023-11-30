@@ -1,45 +1,26 @@
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import { useState, useEffect } from 'react';
-
 import axios from 'axios';
-
-function MapComponent() {
-	const map = useMapEvents({
-		click() {
-			map.locate()
-		}
-	})
-}
-
+import { useStore } from '@/contexts/store';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function Map({ position, zoom }) {
-
-	const API = process.env.API_BASE ||  "http://localhost:4000";
-	const LOCATIONS_URL = `${API}/locations`;
-
-	const [locations, setLocations] = useState([]);
-
+	const [locations, fetchLocations] = useStore(useShallow((state) => [state.locations, state.fetchLocations]));
 	const [location, setLocation] = useState({
-		name: "New fountain",
-		location: position
-	})
+		name: 'New fountain',
+		location: null
+	});
 
 	// const handleOnClick = ((e) => {
 	// 	setLocation({...location, position: e.latlng});
 	// });
 
 	useEffect(() => {
-		getLocations();
-	  }, []);
-
-	const getLocations = async () => {
-		console.log(LOCATIONS_URL);
-		const response = await axios.get(LOCATIONS_URL);
-		setLocations(response.data);
-	}
+		fetchLocations();
+	}, []);
 
 	return (
 		// <MapContainer style={{ height: '100vh' }} center={position} zoom={zoom} scrollWheelZoom={true} onClick={handleOnClick}>
@@ -49,11 +30,10 @@ export default function Map({ position, zoom }) {
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 			/>
 			{locations.map((location, index) => (
-				<Marker position={[location.position.lat, location.position.lng]}>
+				<Marker key={index} position={[location.position.lat, location.position.lng]}>
 					<Popup>{location.name}</Popup>
 				</Marker>
 			))}
-
 		</MapContainer>
 	);
 }
