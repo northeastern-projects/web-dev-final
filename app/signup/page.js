@@ -3,6 +3,7 @@
 import { Button, Container, Paper, PasswordInput, TextInput, Title } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import classes from './page.module.css';
+import axios from 'axios';
 
 export default function SignupPage() {
 	// Form state
@@ -17,7 +18,19 @@ export default function SignupPage() {
 		}
 	});
 
-	const handleSubmit = ({ username, password }) => {};
+	const API_BASE = process.env.API_BASE;
+	// const API_BASE = "http://localhost:4000";
+
+	const handleSubmit = async ({ username, password }) => {
+		axios.post(`${API_BASE}/users/signup`,
+			{username: username, password: password})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(error.response.data);
+			});
+	};
 
 	return (
 		<Container size={420} my={40}>
