@@ -3,9 +3,13 @@
 import { Button, Container, Paper, PasswordInput, TextInput, Title } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import classes from './page.module.css';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useStore } from '@/contexts/store';
 
 export default function LoginPage() {
+	const router = useRouter();
+	const login = useStore((state) => state.login);
+
 	// Form state
 	const form = useForm({
 		initialValues: {
@@ -18,16 +22,16 @@ export default function LoginPage() {
 		}
 	});
 
-	const API_BASE = process.env.API_BASE;
-	// const API_BASE = "http://localhost:4000"
-
-	const handleSubmit = async ({ username, password }) => {
-		console.log(`${API_BASE}/users/signin`);
-		console.log({username: username, password: password});
-		const response = await axios.post(`${API_BASE}/users/signin`, 
-		{username: username, password: password});
-		console.log(response);
-		// Navigate to account / home page (?)
+	const handleSubmit = ({ username, password }) => {
+		try {
+			login(username, password);
+			router.push('/');
+		} catch (error) {
+			form.setErrors({
+				username: 'Invalid username or password',
+				password: 'Invalid username or password'
+			});
+		}
 	};
 
 	return (
