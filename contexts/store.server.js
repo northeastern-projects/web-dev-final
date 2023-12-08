@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 
-// const API = process.env.API_BASE || 'http://localhost:4000';
-const API = 'http://localhost:4000';
+const API = process.env.API_BASE || 'http://localhost:4000';
+// const API = 'http://localhost:4000';
 
 // locations: 
 
