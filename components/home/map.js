@@ -9,6 +9,14 @@ import { Divider, Group, List, Rating, Stack, Text, Title } from '@mantine/core'
 
 export default function Map({ position, zoom }) {
 	const [locations, fetchLocations] = useStore(useShallow((state) => [state.locations, state.fetchLocations]));
+	// const [reviews, fetchReviews] = useStore(useShallow((state) => [state.reviews, state.fetchReviews]));
+
+	// const getReviews = async (locationId) => {
+	// 		console.log(locationId);
+	// 		return;
+	// 		// fetchReviews(location._id);
+	// 		// return reviews;
+	// 	}
 
 	useEffect(() => {
 		fetchLocations();

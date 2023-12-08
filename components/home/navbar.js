@@ -2,14 +2,20 @@ import { Group, Button, Title, TextInput } from '@mantine/core';
 import classes from './navbar.module.css';
 import Link from 'next/link';
 import { useStore } from '@/contexts/store';
+import { useEffect } from 'react';
 
 export function Navbar() {
 	const { username } = useStore((state) => state.user);
+	const logout = useStore((state) => state.logout);
 
 	const handleSearch = (e) => {
 		e.preventDefault();
 		console.log('search');
 	};
+
+	const handleLogout = async (e) => {
+		await logout();
+	}
 
 	return (
 		<header className={classes.header}>
@@ -21,9 +27,14 @@ export function Navbar() {
 						<Link href="/login">
 							<Button variant="default">Log in</Button>
 						</Link>
-						<Link href="/signup">
+						<Link href="/register">
 							<Button>Sign up</Button>
 						</Link>
+					</Group>
+				)}
+				{username && (
+					<Group>
+						<Button onClick={handleLogout} color="red">Logout</Button>
 					</Group>
 				)}
 			</Group>

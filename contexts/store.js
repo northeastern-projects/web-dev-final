@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { fetchLocationsAction, loginAction, signupAction } from './store.server';
+import * as store from './store.server';
 
 export const useStore = create(
 	persist(
@@ -10,14 +10,21 @@ export const useStore = create(
 			},
 			locations: [],
 			fetchLocations: () => {
-				fetchLocationsAction().then((locations) => set({ locations }));
+				store.fetchLocations().then((locations) => set({ locations }));
+			},
+			reviews: [],
+			fetchReviews: (locationId) => {
+				store.fetchReviewsByLocation(locationId).then((reviews) => set({ reviews }))
 			},
 			login: (username, password) => {
-				loginAction(username, password).then((user) => set({ user }));
+				store.loginAction(username, password).then((user) => set({ user }));
 			},
 			signup: (username, password) => {
-				signupAction(username, password).then((user) => set({ user }));
-			}
+				store.signupAction(username, password).then((user) => set({ user }));
+			},
+			logout: () => {
+				store.signoutAction().then(() => set({user: {username: null}}))
+			},
 		}),
 		{ name: 'locations-storage', storage: createJSONStorage() }
 	)
