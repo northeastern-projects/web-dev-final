@@ -1,16 +1,34 @@
 'use client';
 
 import '@mantine/core/styles.css';
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, Loader } from '@mantine/core';
+import { useEffect, useState } from 'react';
 
 export default function Provider({ children }) {
+	const ZustandProvider = ({ children }) => {
+		const [isHydrated, setIsHydrated] = useState(false);
+
+		// Wait till Next.js rehydration completes
+		useEffect(() => {
+			setIsHydrated(true);
+		}, []);
+
+		if (!isHydrated) {
+			return <Loader />;
+		}
+
+		return <div>{children}</div>;
+	};
+
 	return (
 		<html lang="en">
 			<head>
 				<ColorSchemeScript />
 			</head>
 			<body>
-				<MantineProvider>{children}</MantineProvider>
+				<MantineProvider>
+					<ZustandProvider>{children}</ZustandProvider>
+				</MantineProvider>
 			</body>
 		</html>
 	);

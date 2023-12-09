@@ -5,18 +5,11 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import { useEffect } from 'react';
 import { useStore } from '@/contexts/store';
 import { useShallow } from 'zustand/react/shallow';
-import { Divider, Group, List, Rating, Stack, Text, Title } from '@mantine/core';
+import { Box, Button, Group, Rating, Stack, Text, Title } from '@mantine/core';
 
 export default function Map({ position, zoom }) {
+	const { username } = useStore((state) => state.user);
 	const [locations, fetchLocations] = useStore(useShallow((state) => [state.locations, state.fetchLocations]));
-	// const [reviews, fetchReviews] = useStore(useShallow((state) => [state.reviews, state.fetchReviews]));
-
-	// const getReviews = async (locationId) => {
-	// 		console.log(locationId);
-	// 		return;
-	// 		// fetchReviews(location._id);
-	// 		// return reviews;
-	// 	}
 
 	useEffect(() => {
 		fetchLocations();
@@ -35,27 +28,24 @@ export default function Map({ position, zoom }) {
 							{location.name}
 						</Title>
 						<Stack w={300} gap="xs">
-							<Group justify="space-between">
-								<Text m={0} fw={700}>
-									Username
-								</Text>
-								<Rating value={2} />
-							</Group>
-							<Text fz="sm" m={0}>
-								{location.details}
-							</Text>
-						</Stack>
-						<Divider my="sm" />
-						<Stack w={300} gap="xs">
-							<Group justify="space-between">
-								<Text m={0} fw={700}>
-									Username
-								</Text>
-								<Rating value={2} />
-							</Group>
-							<Text fz="sm" m={0}>
-								{location.details || 'No details provided'}
-							</Text>
+							{location.details.reviews.length == 0 ? (
+								<Text m={0}>No reviews for this location yet!</Text>
+							) : (
+								location.details.reviews.map((review, index) => (
+									<Box key={index}>
+										<Group justify="space-between">
+											<Text m={0} fw={700}>
+												{review.user.username}
+											</Text>
+											<Rating value={review.rating} readOnly />
+										</Group>
+										<Text fz="sm" m={0}>
+											No description
+										</Text>
+									</Box>
+								))
+							)}
+							{username && <Button mt={15}>Add review</Button>}
 						</Stack>
 					</Popup>
 				</Marker>

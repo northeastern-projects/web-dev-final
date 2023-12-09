@@ -2,14 +2,13 @@
 
 import axios from 'axios';
 
-// const API = process.env.API_BASE || 'http://localhost:4000';
-const API = 'http://localhost:4000';
+const API = process.env.API_BASE || 'http://localhost:4000';
 
 const request = axios.create({
-	withCredentials: true,
+	withCredentials: true
 });
-  
-// locations: 
+
+// locations:
 
 export const fetchLocations = async () => {
 	const response = await request.get(`${API}/locations`);
@@ -24,32 +23,32 @@ export const createLocation = async (location) => {
 export const fetchLocationById = async (locationId) => {
 	const response = await request.get(`${API}/locations/${locationId}`);
 	return response.data;
-}
+};
 
 export const updateLocation = async (locationId) => {
 	const response = await request.put(`${API}/locations/${locationId}`);
 	return response.data;
-} 
+};
 
 export const deleteLocation = async (locationId) => {
 	const response = await request.delete(`${API}/locations/${locationId}`);
 	return response.data;
-}
+};
 
 export const fetchLocationDetails = async (locationId) => {
 	const response = await request.get(`${API}/locations/${locationId}/details`);
 	return response.data;
-}
+};
 
 export const createLocationReview = async (locationId, review) => {
-	const response = await request.post(`${API}/locations/${locationId}/details`, review);
+	const response = await request.post(`${API}/locations/${locationId}/reviews`, review);
 	return response.data;
-}
+};
 
 export const fetchReviewsByLocation = async (locationId) => {
 	const response = await request.get(`${API}/locations/${locationId}/reviews`);
 	return response.data;
-}
+};
 
 // users:
 
@@ -96,7 +95,7 @@ export const signupAction = async (username, password) => {
 export const signoutAction = async () => {
 	const response = await request.post(`${API}/users/signout`, {});
 	return response.data;
-}
+};
 
 // search
 

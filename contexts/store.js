@@ -12,10 +12,6 @@ export const useStore = create(
 			fetchLocations: () => {
 				store.fetchLocations().then((locations) => set({ locations }));
 			},
-			reviews: [],
-			fetchReviews: (locationId) => {
-				store.fetchReviewsByLocation(locationId).then((reviews) => set({ reviews }))
-			},
 			login: (username, password) => {
 				store.loginAction(username, password).then((user) => set({ user }));
 			},
@@ -23,9 +19,9 @@ export const useStore = create(
 				store.signupAction(username, password).then((user) => set({ user }));
 			},
 			logout: () => {
-				store.signoutAction().then(() => set({user: {username: null}}))
-			},
+				set({ user: { username: null } });
+			}
 		}),
-		{ name: 'locations-storage', storage: createJSONStorage() }
+		{ name: 'locations-storage', storage: createJSONStorage(() => sessionStorage) }
 	)
 );
