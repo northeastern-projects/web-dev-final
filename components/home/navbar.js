@@ -2,18 +2,14 @@ import { Group, Button, Title, TextInput } from '@mantine/core';
 import classes from './navbar.module.css';
 import Link from 'next/link';
 import { useStore } from '@/contexts/store';
+import { useShallow } from 'zustand/react/shallow';
 
 export function Navbar() {
-	const { username } = useStore((state) => state.user);
-	const logout = useStore((state) => state.logout);
+	const [{ username }, logout] = useStore(useShallow((state) => [state.user, state.logout]));
 
 	const handleSearch = (e) => {
 		e.preventDefault();
 		console.log('search');
-	};
-
-	const handleLogout = async (e) => {
-		await logout();
 	};
 
 	return (
@@ -32,8 +28,11 @@ export function Navbar() {
 					</Group>
 				)}
 				{username && (
-					<Group>
-						<Button onClick={handleLogout} color="red">
+					<Group gap="sm">
+						<Link href="/profile">
+							<Button variant="outline">My Profile</Button>
+						</Link>
+						<Button onClick={logout} color="red">
 							Logout
 						</Button>
 					</Group>

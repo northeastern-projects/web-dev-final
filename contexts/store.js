@@ -6,9 +6,11 @@ export const useStore = create(
 	persist(
 		(set, get) => ({
 			user: {
+				_id: null,
 				username: null
 			},
 			locations: [],
+			userReviews: [],
 			fetchLocations: () => {
 				store.fetchLocations().then((locations) => set({ locations }));
 			},
@@ -20,6 +22,12 @@ export const useStore = create(
 			},
 			logout: () => {
 				set({ user: { username: null } });
+			},
+			addReview: (locationId, review) => {
+				store.createLocationReview(locationId, review).then(get().fetchLocations());
+			},
+			getUserReviews: (userId) => {
+				store.fetchUserReviews(userId).then((userReviews) => set({ userReviews }));
 			}
 		}),
 		{ name: 'locations-storage', storage: createJSONStorage(() => sessionStorage) }
