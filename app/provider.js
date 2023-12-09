@@ -1,7 +1,7 @@
 'use client';
 
 import '@mantine/core/styles.css';
-import { MantineProvider, ColorSchemeScript, Loader } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, Loader, Center } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 export default function Provider({ children }) {
@@ -14,7 +14,11 @@ export default function Provider({ children }) {
 		}, []);
 
 		if (!isHydrated) {
-			return <Loader />;
+			return (
+				<Center w="100vw" h="100vh">
+					<Loader />
+				</Center>
+			);
 		}
 
 		return <div>{children}</div>;
