@@ -5,6 +5,10 @@ import Link from 'next/link';
 export default function Review({ review, abridged = false }) {
 	const { _id } = useStore((state) => state.user);
 
+	if (!review) {
+		return null;
+	}
+
 	if (abridged) {
 		return (
 			<Box>
@@ -19,10 +23,6 @@ export default function Review({ review, abridged = false }) {
 				</Text>
 			</Box>
 		);
-	}
-
-	if (!review || !review.user) {
-		return null;
 	}
 
 	return (

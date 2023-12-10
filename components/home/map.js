@@ -5,9 +5,8 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import { useEffect, useState } from 'react';
 import { useStore } from '@/contexts/store';
 import { useShallow } from 'zustand/react/shallow';
-import { Box, Button, Group, Modal, Rating, Stack, Text, Textarea, Title } from '@mantine/core';
+import { Button, Group, Modal, Rating, Stack, Text, Textarea, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Link from 'next/link';
 import Review from './review';
 
 export default function Map({ position, zoom }) {
@@ -62,7 +61,7 @@ export default function Map({ position, zoom }) {
 							</Title>
 							<Stack w={300} gap="xs">
 								{location.details && location.details.reviews.length > 0 ? (
-									location.details.reviews.map((review, index) => <>{review.user && <Review review={review} key={index} />}</>)
+									location.details.reviews.map((review, index) => <Review review={review} key={index} />)
 								) : (
 									<Text m={0}>No reviews for this location yet!</Text>
 								)}

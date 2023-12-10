@@ -12,8 +12,12 @@ export const useStore = create(
 				role: null
 			},
 			locations: [],
+			detailLocations: [],
 			userReviews: [],
-			searchResults: null,
+			search: {
+				results: [],
+				top: null
+			},
 			alienUser: {
 				_id: null,
 				username: null,
@@ -23,11 +27,14 @@ export const useStore = create(
 			fetchLocations: () => {
 				store.fetchLocations().then((locations) => set({ locations }));
 			},
+			fetchLocationsByPlaceId: (placeId) => {
+				store.getLocationsByPlaceId(placeId).then((detailLocations) => set({ detailLocations }));
+			},
 			login: (username, password) => {
 				store.loginAction(username, password).then((user) => set({ user }));
 			},
-			signup: (username, password) => {
-				store.signupAction(username, password).then((user) => set({ user }));
+			signup: (username, email, password) => {
+				store.signupAction(username, email, password).then((user) => set({ user }));
 			},
 			logout: () => {
 				set({
@@ -38,7 +45,10 @@ export const useStore = create(
 						role: null
 					},
 					userReviews: [],
-					searchResults: null,
+					search: {
+						results: [],
+						top: null
+					},
 					alienUser: {
 						_id: null,
 						username: null,
@@ -56,8 +66,11 @@ export const useStore = create(
 			updateReview: (reviewId, review) => {
 				store.editReview(reviewId, review);
 			},
-			search: (searchTerm) => {
-				store.getSearchResults(searchTerm).then((searchResults) => set({ searchResults }));
+			clearSearchResults: () => {
+				set({ search: { top: null, results: [] } });
+			},
+			getSearchResults: (searchTerm) => {
+				store.getSearchResults(searchTerm).then((searchResults) => set({ search: { top: searchResults.places[0], results: searchResults } }));
 			},
 			addLocation: (location) => {
 				store.createLocation(location).then(get().fetchLocations());

@@ -25,6 +25,11 @@ export const fetchLocationById = async (locationId) => {
 	return response.data;
 };
 
+export const getLocationsByPlaceId = async (placeId) => {
+	const response = await request.get(`${API}/locations/place/${placeId}`);
+	return response.data;
+};
+
 export const updateLocation = async (locationId) => {
 	const response = await request.put(`${API}/locations/${locationId}`);
 	return response.data;
@@ -97,8 +102,8 @@ export const loginAction = async (username, password) => {
 	return response.data;
 };
 
-export const signupAction = async (username, password) => {
-	const response = await request.post(`${API}/users/signup`, { username, password });
+export const signupAction = async (username, email, password) => {
+	const response = await request.post(`${API}/users/signup`, { username, email, password });
 	return response.data;
 };
 

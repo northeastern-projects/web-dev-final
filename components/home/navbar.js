@@ -9,18 +9,26 @@ import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 import { IconChevronsDown, IconChevronsUp } from '@tabler/icons-react';
 import Review from './review';
+import Search from './search';
 
 export function Navbar() {
 	const router = useRouter();
-	const [{ username, _id }, logout, search, searchResults, addLocation, fetchUserReviews, userReviews] = useStore(
-		useShallow((state) => [state.user, state.logout, state.search, state.searchResults, state.addLocation, state.fetchUserReviews, state.userReviews])
+	const [{ username, _id }, logout, getSearchResults, { top }, fetchUserReviews, userReviews, clearSearchResults] = useStore(
+		useShallow((state) => [
+			state.user,
+			state.logout,
+			state.getSearchResults,
+			state.search,
+			state.fetchUserReviews,
+			state.userReviews,
+			state.clearSearchResults
+		])
 	);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [opened, { open, close }] = useDisclosure(false);
 	const [menuOpened, setMenuOpened] = useState(false);
 
 	const [buildingName, setBuildingName] = useState('');
-	const [topResult, setTopResult] = useState(null);
 	const [latestUserReview, setLatestUserReview] = useState(null);
 
 	const handleSearch = () => {
@@ -33,64 +41,30 @@ export function Navbar() {
 			return;
 		}
 
-		search(searchTerm);
-		setSearchTerm('');
-
-		if (searchResults?.places?.length > 0) {
-			setTopResult(searchResults.places[0]);
-			open();
-		}
+		getSearchResults(searchTerm);
 	};
 
-	const handleAddLocation = () => {
-		addLocation({
-			building: topResult.displayName.text,
-			name: buildingName,
-			place_id: topResult.id,
-			position: {
-				lat: topResult.location.latitude,
-				lng: topResult.location.longitude
-			}
-		});
+	const cleanClose = () => {
+		setSearchTerm('');
 		setBuildingName('');
-		setTopResult(null);
+		clearSearchResults();
 		close();
 	};
 
 	useEffect(() => {
-		fetchUserReviews(_id);
+		if (_id) fetchUserReviews(_id);
 		if (userReviews.length > 0) {
 			setLatestUserReview(userReviews.pop());
 		}
 	}, [userReviews, _id]);
 
 	useEffect(() => {
-		if (searchResults?.places?.length > 0) {
-			setTopResult(searchResults.places[0]);
-		}
-	}, [searchResults]);
+		if (top) open();
+	}, [top]);
 
 	return (
 		<>
-			<Modal opened={opened} onClose={close} zIndex={1000} title="Search Results">
-				{topResult && (
-					<>
-						<Badge color="blue" size="lg">
-							{topResult.displayName.text}
-						</Badge>
-						<TextInput
-							label="Location name"
-							placeholder={`${topResult.displayName.text} First Floor`}
-							value={buildingName}
-							onChange={(e) => setBuildingName(e.currentTarget.value)}
-							mt={15}
-						/>
-						<Button fullWidth mt={15} onClick={handleAddLocation}>
-							Add Location
-						</Button>
-					</>
-				)}
-			</Modal>
+			<Search opened={opened} close={cleanClose} buildingName={buildingName} setBuildingName={setBuildingName} />
 			<header className={classes.header}>
 				<Group justify="space-between" h="100%">
 					<Title order={2}>Fountain Guru</Title>
@@ -123,10 +97,9 @@ export function Navbar() {
 									<Menu.Label>Actions</Menu.Label>
 									<Menu.Item onClick={() => router.push('/profile')}>My Profile</Menu.Item>
 
-									<Menu.Divider />
-
 									{latestUserReview && (
 										<>
+											<Menu.Divider />
 											<Menu.Label>Latest Review</Menu.Label>
 											<Menu.Item>
 												<Review review={latestUserReview} abridged />
