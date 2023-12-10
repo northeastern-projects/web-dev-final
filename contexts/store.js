@@ -30,7 +30,22 @@ export const useStore = create(
 				store.signupAction(username, password).then((user) => set({ user }));
 			},
 			logout: () => {
-				set({ user: { username: null } });
+				set({
+					user: {
+						_id: null,
+						username: null,
+						email: null,
+						role: null
+					},
+					userReviews: [],
+					searchResults: null,
+					alienUser: {
+						_id: null,
+						username: null,
+						email: null,
+						role: null
+					}
+				});
 			},
 			addReview: (locationId, review) => {
 				store.createLocationReview(locationId, review).then(get().fetchLocations());

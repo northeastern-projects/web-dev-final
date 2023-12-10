@@ -5,8 +5,11 @@ import { Avatar, Text, Button, Container, Title, Group, Table, Rating, TextInput
 import { useStore } from '@/contexts/store';
 import Link from 'next/link';
 import { useShallow } from 'zustand/react/shallow';
+import { useRouter } from 'next/navigation';
+import { notifications } from '@mantine/notifications';
 
 export default function ProfilePage() {
+	const router = useRouter();
 	const [{ username, email, _id }, userReviews, fetchUserReviews, updateReview, deleteReview] = useStore(
 		useShallow((state) => [state.user, state.userReviews, state.fetchUserReviews, state.updateReview, state.deleteReview])
 	);
@@ -17,6 +20,16 @@ export default function ProfilePage() {
 	const [editRating, setEditRating] = useState(0);
 
 	useEffect(() => {
+		if (!_id) {
+			router.push('/login');
+			notifications.clean();
+			notifications.show({
+				title: 'You are not logged in',
+				message: 'Please log in to view your profile',
+				color: 'red'
+			});
+		}
+
 		fetchUserReviews(_id);
 	}, []);
 

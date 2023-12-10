@@ -1,4 +1,4 @@
-import { Group, Button, Title, TextInput, Modal, Badge, Text, Menu, Rating } from '@mantine/core';
+import { Group, Button, Title, TextInput, Modal, Badge, Menu } from '@mantine/core';
 import classes from './navbar.module.css';
 import Link from 'next/link';
 import { useStore } from '@/contexts/store';
@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
-import { IconArrowDown } from '@tabler/icons-react';
+import { IconChevronsDown, IconChevronsUp } from '@tabler/icons-react';
+import Review from './review';
 
 export function Navbar() {
 	const router = useRouter();
@@ -16,6 +17,8 @@ export function Navbar() {
 	);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [opened, { open, close }] = useDisclosure(false);
+	const [menuOpened, setMenuOpened] = useState(false);
+
 	const [buildingName, setBuildingName] = useState('');
 	const [topResult, setTopResult] = useState(null);
 	const [latestUserReview, setLatestUserReview] = useState(null);
@@ -39,12 +42,27 @@ export function Navbar() {
 		}
 	};
 
+	const handleAddLocation = () => {
+		addLocation({
+			building: topResult.displayName.text,
+			name: buildingName,
+			place_id: topResult.id,
+			position: {
+				lat: topResult.location.latitude,
+				lng: topResult.location.longitude
+			}
+		});
+		setBuildingName('');
+		setTopResult(null);
+		close();
+	};
+
 	useEffect(() => {
 		fetchUserReviews(_id);
 		if (userReviews.length > 0) {
 			setLatestUserReview(userReviews.pop());
 		}
-	}, []);
+	}, [userReviews, _id]);
 
 	useEffect(() => {
 		if (searchResults?.places?.length > 0) {
@@ -67,24 +85,7 @@ export function Navbar() {
 							onChange={(e) => setBuildingName(e.currentTarget.value)}
 							mt={15}
 						/>
-						<Button
-							fullWidth
-							mt={15}
-							onClick={() => {
-								addLocation({
-									building: topResult.displayName.text,
-									name: buildingName,
-									place_id: topResult.id,
-									position: {
-										lat: topResult.location.latitude,
-										lng: topResult.location.longitude
-									}
-								});
-								setBuildingName('');
-								setTopResult(null);
-								close();
-							}}
-						>
+						<Button fullWidth mt={15} onClick={handleAddLocation}>
 							Add Location
 						</Button>
 					</>
@@ -111,9 +112,9 @@ export function Navbar() {
 					)}
 					{username && (
 						<Group gap="sm">
-							<Menu shadow="md" zIndex={1000} width={300}>
+							<Menu shadow="md" zIndex={1000} width={300} opened={menuOpened} onChange={setMenuOpened}>
 								<Menu.Target>
-									<Button variant="outline" rightSection={<IconArrowDown />}>
+									<Button variant="outline" rightSection={menuOpened ? <IconChevronsUp /> : <IconChevronsDown />}>
 										@{username}
 									</Button>
 								</Menu.Target>
@@ -124,19 +125,13 @@ export function Navbar() {
 
 									<Menu.Divider />
 
-									<Menu.Label>Latest Review</Menu.Label>
 									{latestUserReview && (
-										<Menu.Item>
-											<Group justify="space-between">
-												<Text m={0} fw={700}>
-													{username}
-												</Text>
-												<Rating value={latestUserReview.rating} readOnly />
-											</Group>
-											<Text fz="sm" m={0}>
-												{latestUserReview.reviewText || 'No description'}
-											</Text>
-										</Menu.Item>
+										<>
+											<Menu.Label>Latest Review</Menu.Label>
+											<Menu.Item>
+												<Review review={latestUserReview} abridged />
+											</Menu.Item>
+										</>
 									)}
 								</Menu.Dropdown>
 							</Menu>

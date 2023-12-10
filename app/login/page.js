@@ -5,6 +5,7 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import classes from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/contexts/store';
+import { notifications } from '@mantine/notifications';
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -25,6 +26,11 @@ export default function LoginPage() {
 	const handleSubmit = ({ username, password }) => {
 		try {
 			login(username, password);
+			notifications.show({
+				title: `Welcome back ${username}`,
+				message: 'You have been logged in',
+				color: 'green'
+			});
 			router.push('/');
 		} catch (error) {
 			form.setErrors({

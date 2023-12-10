@@ -5,6 +5,7 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import classes from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/contexts/store';
+import { notifications } from '@mantine/notifications';
 
 export default function SignupPage() {
 	const router = useRouter();
@@ -25,6 +26,11 @@ export default function SignupPage() {
 	const handleSubmit = ({ username, password }) => {
 		try {
 			signup(username, password);
+			notifications.show({
+				title: `Hey there ${username}`,
+				message: 'Thanks for signing up!',
+				color: 'green'
+			});
 			router.push('/');
 		} catch (error) {
 			form.setErrors({

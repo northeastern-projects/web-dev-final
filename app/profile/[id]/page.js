@@ -9,7 +9,7 @@ import { useShallow } from 'zustand/react/shallow';
 export default function AlienProfilePage({ params }) {
 	const userId = params.id;
 	const [{ username, email, role }, userReviews, fetchUserReviews, deleteReview, fetchAlienUser] = useStore(
-		useShallow((state) => [state.alienUser, state.userReviews, state.getUserReviews, state.deleteReview, state.fetchAlienUser])
+		useShallow((state) => [state.alienUser, state.userReviews, state.fetchUserReviews, state.deleteReview, state.fetchAlienUser])
 	);
 
 	useEffect(() => {
