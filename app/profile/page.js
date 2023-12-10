@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Avatar, Text, Paper, Button, Container, Title, Group, Table, Rating, TextInput } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Avatar, Text, Button, Container, Title, Group, Table, Rating, TextInput } from '@mantine/core';
 import { useStore } from '@/contexts/store';
 import Link from 'next/link';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function ProfilePage() {
-	const [{ username, _id }, userReviews, fetchUserReviews] = useStore(useShallow((state) => [state.user, state.userReviews, state.getUserReviews]));
+	const [{ username, email, _id }, userReviews, fetchUserReviews, updateReview, deleteReview] = useStore(
+		useShallow((state) => [state.user, state.userReviews, state.fetchUserReviews, state.updateReview, state.deleteReview])
+	);
 
 	// Current editing button state
 	const [editing, setEditing] = useState(false);
@@ -17,8 +19,6 @@ export default function ProfilePage() {
 	useEffect(() => {
 		fetchUserReviews(_id);
 	}, []);
-
-	console.log(userReviews);
 
 	return (
 		<Container size="lg" mt={100}>
@@ -32,6 +32,7 @@ export default function ProfilePage() {
 			<Title weight={700} mt={30}>
 				@{username}
 			</Title>
+			<Text>{email}</Text>
 
 			<Text mt={30} fw="bold">
 				Your Reviews:
@@ -65,7 +66,15 @@ export default function ProfilePage() {
 							<Table.Td>
 								<Button.Group>
 									{editing === index ? (
-										<Button variant="outline" color="green" onClick={() => setEditing(false)}>
+										<Button
+											variant="outline"
+											color="green"
+											onClick={() => {
+												setEditing(false);
+												updateReview(review._id, { reviewText: editReview, rating: editRating });
+												fetchUserReviews(_id);
+											}}
+										>
 											Save
 										</Button>
 									) : (
@@ -80,7 +89,15 @@ export default function ProfilePage() {
 											Edit
 										</Button>
 									)}
-									<Button color="red">Delete</Button>
+									<Button
+										color="red"
+										onClick={() => {
+											deleteReview(review._id);
+											fetchUserReviews(_id);
+										}}
+									>
+										Delete
+									</Button>
 								</Button.Group>
 							</Table.Td>
 						</Table.Tr>

@@ -2,11 +2,12 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '@/contexts/store';
 import { useShallow } from 'zustand/react/shallow';
 import { Box, Button, Group, Modal, Rating, Stack, Text, Textarea, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import Link from 'next/link';
 
 export default function Map({ position, zoom }) {
 	const { username, _id } = useStore((state) => state.user);
@@ -59,15 +60,21 @@ export default function Map({ position, zoom }) {
 								{location.name}
 							</Title>
 							<Stack w={300} gap="xs">
-								{location.details.reviews.length == 0 ? (
-									<Text m={0}>No reviews for this location yet!</Text>
-								) : (
+								{location.details && location.details.reviews.length > 0 ? (
 									location.details.reviews.map((review, index) => (
 										<Box key={index}>
 											<Group justify="space-between">
-												<Text m={0} fw={700}>
-													{review.user.username}
-												</Text>
+												{review.user._id !== _id ? (
+													<Link href={`/profile/${review.user._id}`}>
+														<Text m={0} fw={700}>
+															{review.user.username}
+														</Text>
+													</Link>
+												) : (
+													<Text m={0} fw={700}>
+														{review.user.username}
+													</Text>
+												)}
 												<Rating value={review.rating} readOnly />
 											</Group>
 											<Text fz="sm" m={0}>
@@ -75,6 +82,8 @@ export default function Map({ position, zoom }) {
 											</Text>
 										</Box>
 									))
+								) : (
+									<Text m={0}>No reviews for this location yet!</Text>
 								)}
 								{username && (
 									<Button

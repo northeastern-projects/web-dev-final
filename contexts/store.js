@@ -7,10 +7,19 @@ export const useStore = create(
 		(set, get) => ({
 			user: {
 				_id: null,
-				username: null
+				username: null,
+				email: null,
+				role: null
 			},
 			locations: [],
 			userReviews: [],
+			searchResults: null,
+			alienUser: {
+				_id: null,
+				username: null,
+				email: null,
+				role: null
+			},
 			fetchLocations: () => {
 				store.fetchLocations().then((locations) => set({ locations }));
 			},
@@ -26,8 +35,23 @@ export const useStore = create(
 			addReview: (locationId, review) => {
 				store.createLocationReview(locationId, review).then(get().fetchLocations());
 			},
-			getUserReviews: (userId) => {
+			fetchUserReviews: (userId) => {
 				store.fetchUserReviews(userId).then((userReviews) => set({ userReviews }));
+			},
+			updateReview: (reviewId, review) => {
+				store.editReview(reviewId, review);
+			},
+			search: (searchTerm) => {
+				store.getSearchResults(searchTerm).then((searchResults) => set({ searchResults }));
+			},
+			addLocation: (location) => {
+				store.createLocation(location).then(get().fetchLocations());
+			},
+			deleteReview: (reviewId) => {
+				store.deleteReview(reviewId).then(get().fetchLocations());
+			},
+			fetchAlienUser: (userId) => {
+				store.fetchUserById(userId).then((alienUser) => set({ alienUser }));
 			}
 		}),
 		{ name: 'locations-storage', storage: createJSONStorage(() => sessionStorage) }

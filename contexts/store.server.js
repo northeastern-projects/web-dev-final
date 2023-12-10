@@ -50,6 +50,16 @@ export const fetchReviewsByLocation = async (locationId) => {
 	return response.data;
 };
 
+export const editReview = async (reviewId, review) => {
+	const response = await request.put(`${API}/reviews/${reviewId}`, review);
+	return response.data;
+};
+
+export const deleteReview = async (reviewId) => {
+	const response = await request.delete(`${API}/reviews/${reviewId}`);
+	return response.data;
+};
+
 // users:
 
 export const createUser = async (user) => {
@@ -100,11 +110,11 @@ export const signoutAction = async () => {
 // search
 
 export const getSearchResults = async (term) => {
-	const response = await request.put(`${API}/search/${term}`);
+	const response = await request.get(`${API}/search/${term}`);
 	return response.data;
 };
 
 export const getLocationsBySearchTerm = async (term) => {
-	const response = await request.put(`${API}/search/${term}/locations`);
+	const response = await request.get(`${API}/search/${term}/locations`);
 	return response.data;
 };

@@ -1,8 +1,10 @@
 'use client';
 
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { MantineProvider, ColorSchemeScript, Loader, Center } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { Notifications } from '@mantine/notifications';
 
 export default function Provider({ children }) {
 	const ZustandProvider = ({ children }) => {
@@ -31,6 +33,7 @@ export default function Provider({ children }) {
 			</head>
 			<body>
 				<MantineProvider>
+					<Notifications autoClose={5000} position="top-right" zIndex={10000} />
 					<ZustandProvider>{children}</ZustandProvider>
 				</MantineProvider>
 			</body>
