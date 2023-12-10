@@ -9,7 +9,12 @@ export const useStore = create(
 				_id: null,
 				username: null,
 				email: null,
-				role: null
+				role: null,
+				privileges: null
+			},
+			admin: {
+				users: [],
+				admins: []
 			},
 			locations: [],
 			favoriteLocations: [],
@@ -24,6 +29,19 @@ export const useStore = create(
 				username: null,
 				email: null,
 				role: null
+			},
+			fetchAll: () => {
+				store.fetchUsers().then((users) => {
+					store.fetchAdmins().then((admins) => {
+						set({ admin: { users, admins } });
+					});
+				});
+			},
+			promoteUser: (userId) => {
+				store.updateUser(userId, { role: 'ADMIN' }).then(get().fetchAll());
+			},
+			demoteAdmin: (userId) => {
+				store.updateUser(userId, { role: 'USER' }).then(get().fetchAll());
 			},
 			fetchLocations: () => {
 				store.fetchLocations().then((locations) => set({ locations }));
@@ -43,8 +61,15 @@ export const useStore = create(
 						_id: null,
 						username: null,
 						email: null,
-						role: null
+						role: null,
+						privileges: null
 					},
+					admin: {
+						users: [],
+						admins: []
+					},
+					favoriteLocations: [],
+					detailLocations: [],
 					userReviews: [],
 					search: {
 						results: [],
@@ -68,10 +93,12 @@ export const useStore = create(
 				store.getUserFavoriteLocations(userId).then((favoriteLocations) => set({ favoriteLocations }));
 			},
 			addFavoriteLocation: (userId, locationId) => {
-				store.addUserFavoriteLocation(userId, locationId).then(get().fetchLocations());
+				store.addUserFavoriteLocation(userId, locationId).then(set({ user: { ...get().user, favorites: [...get().user.favorites, locationId] } }));
 			},
 			removeFavoriteLocation: (userId, locationId) => {
-				store.removeUserFavoriteLocation(userId, locationId).then(get().fetchLocations());
+				store
+					.removeUserFavoriteLocation(userId, locationId)
+					.then(set({ user: { ...get().user, favorites: [...get().user.favorites.filter((favorite) => favorite !== locationId)] } }));
 			},
 			updateReview: (reviewId, review) => {
 				store.editReview(reviewId, review);

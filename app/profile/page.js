@@ -10,8 +10,16 @@ import { notifications } from '@mantine/notifications';
 
 export default function ProfilePage() {
 	const router = useRouter();
-	const [{ username, email, _id }, userReviews, fetchUserReviews, updateReview, deleteReview, favoriteLocations] = useStore(
-		useShallow((state) => [state.user, state.userReviews, state.fetchUserReviews, state.updateReview, state.deleteReview, state.favoriteLocations])
+	const [{ username, email, _id }, userReviews, fetchUserReviews, updateReview, deleteReview, favoriteLocations, fetchUserFavoriteLocations] = useStore(
+		useShallow((state) => [
+			state.user,
+			state.userReviews,
+			state.fetchUserReviews,
+			state.updateReview,
+			state.deleteReview,
+			state.favoriteLocations,
+			state.fetchUserFavoriteLocations
+		])
 	);
 
 	// Current editing button state
@@ -31,6 +39,7 @@ export default function ProfilePage() {
 		}
 
 		fetchUserReviews(_id);
+		fetchUserFavoriteLocations(_id);
 	}, []);
 
 	return (
@@ -121,7 +130,7 @@ export default function ProfilePage() {
 				</Table>
 			)}
 
-			<Text mt={30} fw="bold">
+			<Text mt={30} mb={15} fw="bold">
 				Your Favorite Locations:
 			</Text>
 			{favoriteLocations.length === 0 && <Text mt={15}>You have no favorite locations!</Text>}

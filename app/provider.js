@@ -33,7 +33,7 @@ export default function Provider({ children }) {
 			</head>
 			<body>
 				<MantineProvider>
-					<Notifications autoClose={5000} position="top-right" zIndex={10000} />
+					<Notifications autoClose={5000} position="bottom-left" zIndex={10000} />
 					<ZustandProvider>{children}</ZustandProvider>
 				</MantineProvider>
 			</body>

@@ -13,7 +13,7 @@ import Search from './search';
 
 export function Navbar() {
 	const router = useRouter();
-	const [{ username, _id }, logout, getSearchResults, { top }, fetchUserReviews, userReviews, clearSearchResults] = useStore(
+	const [{ username, _id, privileges }, logout, getSearchResults, { top }, fetchUserReviews, userReviews, clearSearchResults] = useStore(
 		useShallow((state) => [
 			state.user,
 			state.logout,
@@ -54,7 +54,7 @@ export function Navbar() {
 
 	useEffect(() => {
 		if (_id) fetchUserReviews(_id);
-		if (userReviews.length > 0) {
+		if (privileges !== '*' && userReviews.length > 0) {
 			setLatestUserReview(userReviews.pop());
 		}
 	}, [userReviews, _id]);
@@ -98,6 +98,7 @@ export function Navbar() {
 						<Menu.Dropdown>
 							<Menu.Label>Actions</Menu.Label>
 							<Menu.Item onClick={() => router.push('/profile')}>My Profile</Menu.Item>
+							{privileges === '*' && <Menu.Item onClick={() => router.push('/admin')}>Administration</Menu.Item>}
 
 							{latestUserReview && (
 								<>

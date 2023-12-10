@@ -77,6 +77,11 @@ export const fetchUsers = async () => {
 	return response.data;
 };
 
+export const fetchAdmins = async () => {
+	const response = await request.get(`${API}/users/admins`);
+	return response.data;
+};
+
 export const fetchUserById = async (userId) => {
 	const response = await request.get(`${API}/users/${userId}`);
 	return response.data;
@@ -103,7 +108,7 @@ export const addUserFavoriteLocation = async (userId, locationId) => {
 };
 
 export const removeUserFavoriteLocation = async (userId, locationId) => {
-	const response = await request.delete(`${API}/users/${userId}/favorite`, { locationId });
+	const response = await request.delete(`${API}/users/${userId}/favorite/${locationId}`);
 	return response.data;
 };
 

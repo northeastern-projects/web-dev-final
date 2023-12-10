@@ -8,8 +8,8 @@ import { useShallow } from 'zustand/react/shallow';
 
 export default function AlienProfilePage({ params }) {
 	const userId = params.id;
-	const [{ username, email, role }, userReviews, fetchUserReviews, deleteReview, fetchAlienUser] = useStore(
-		useShallow((state) => [state.alienUser, state.userReviews, state.fetchUserReviews, state.deleteReview, state.fetchAlienUser])
+	const [{ username, email }, userReviews, fetchUserReviews, deleteReview, fetchAlienUser, { privileges }] = useStore(
+		useShallow((state) => [state.alienUser, state.userReviews, state.fetchUserReviews, state.deleteReview, state.fetchAlienUser, state.user])
 	);
 
 	useEffect(() => {
@@ -29,7 +29,7 @@ export default function AlienProfilePage({ params }) {
 			<Title weight={700} mt={30}>
 				@{username}
 			</Title>
-			<Text>{email}</Text>
+			{privileges === '*' && <Text>{email}</Text>}
 
 			<Text mt={30} fw="bold">
 				Your Reviews:
@@ -42,7 +42,7 @@ export default function AlienProfilePage({ params }) {
 							<Table.Th>Location</Table.Th>
 							<Table.Th>Rating</Table.Th>
 							<Table.Th>Description</Table.Th>
-							{role === 'ADMIN' && <Table.Th>Actions</Table.Th>}
+							{privileges === '*' && <Table.Th>Actions</Table.Th>}
 						</Table.Tr>
 					</Table.Thead>
 					<Table.Tbody>
@@ -53,7 +53,7 @@ export default function AlienProfilePage({ params }) {
 									<Rating value={review.rating} readOnly />
 								</Table.Td>
 								<Table.Td>{review.reviewText || 'No description'}</Table.Td>
-								{role === 'ADMIN' && (
+								{privileges === '*' && (
 									<Table.Td>
 										<Button
 											color="red"

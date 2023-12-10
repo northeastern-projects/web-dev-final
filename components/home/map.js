@@ -74,7 +74,7 @@ export default function Map({ position, zoom }) {
 						<Popup>
 							<Group justify="space-between" mb={15}>
 								<Title order={4}>{location.name}</Title>
-								{username && (
+								{favorites && (
 									<ActionIcon
 										variant="filled"
 										aria-label="Favorite"
