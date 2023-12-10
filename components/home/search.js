@@ -24,7 +24,7 @@ export default function Search({ opened, close, buildingName, setBuildingName })
 	};
 
 	return (
-		<Modal opened={opened} onClose={close} zIndex={1000} title="Search Results">
+		<Modal opened={opened} onClose={close} zIndex={10000} title="Search Results">
 			<Link href={`/details/${top.id}`}>
 				<Badge color="blue" size="lg">
 					{top.displayName.text}
