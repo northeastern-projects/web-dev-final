@@ -1,4 +1,4 @@
-import { Group, Button, Title, TextInput, Modal, Badge, Menu, Drawer, Divider, Burger } from '@mantine/core';
+import { Group, Button, Title, TextInput, Menu, Drawer, Divider, Burger } from '@mantine/core';
 import classes from './navbar.module.css';
 import Link from 'next/link';
 import { useStore } from '@/contexts/store';

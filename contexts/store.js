@@ -12,6 +12,7 @@ export const useStore = create(
 				role: null
 			},
 			locations: [],
+			favoriteLocations: [],
 			detailLocations: [],
 			userReviews: [],
 			search: {
@@ -62,6 +63,15 @@ export const useStore = create(
 			},
 			fetchUserReviews: (userId) => {
 				store.fetchUserReviews(userId).then((userReviews) => set({ userReviews }));
+			},
+			fetchUserFavoriteLocations: (userId) => {
+				store.getUserFavoriteLocations(userId).then((favoriteLocations) => set({ favoriteLocations }));
+			},
+			addFavoriteLocation: (userId, locationId) => {
+				store.addUserFavoriteLocation(userId, locationId).then(get().fetchLocations());
+			},
+			removeFavoriteLocation: (userId, locationId) => {
+				store.removeUserFavoriteLocation(userId, locationId).then(get().fetchLocations());
 			},
 			updateReview: (reviewId, review) => {
 				store.editReview(reviewId, review);

@@ -97,6 +97,21 @@ export const fetchUserReviews = async (userId) => {
 	return response.data;
 };
 
+export const addUserFavoriteLocation = async (userId, locationId) => {
+	const response = await request.post(`${API}/users/${userId}/favorite`, { locationId });
+	return response.data;
+};
+
+export const removeUserFavoriteLocation = async (userId, locationId) => {
+	const response = await request.delete(`${API}/users/${userId}/favorite`, { locationId });
+	return response.data;
+};
+
+export const getUserFavoriteLocations = async (userId) => {
+	const response = await request.get(`${API}/users/${userId}/favorite`);
+	return response.data;
+};
+
 export const loginAction = async (username, password) => {
 	const response = await request.post(`${API}/users/signin`, { username, password });
 	return response.data;
