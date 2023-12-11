@@ -10,22 +10,33 @@ import { notifications } from '@mantine/notifications';
 
 export default function ProfilePage() {
 	const router = useRouter();
-	const [{ username, email, _id }, userReviews, fetchUserReviews, updateReview, deleteReview, favoriteLocations, fetchUserFavoriteLocations] = useStore(
-		useShallow((state) => [
-			state.user,
-			state.userReviews,
-			state.fetchUserReviews,
-			state.updateReview,
-			state.deleteReview,
-			state.favoriteLocations,
-			state.fetchUserFavoriteLocations
-		])
-	);
+	const [{ username, email, _id }, userReviews, fetchUserReviews, updateReview, deleteReview, favoriteLocations, fetchUserFavoriteLocations, updateEmail] =
+		useStore(
+			useShallow((state) => [
+				state.user,
+				state.userReviews,
+				state.fetchUserReviews,
+				state.updateReview,
+				state.deleteReview,
+				state.favoriteLocations,
+				state.fetchUserFavoriteLocations,
+				state.updateEmail
+			])
+		);
 
 	// Current editing button state
 	const [editing, setEditing] = useState(false);
 	const [editReview, setEditReview] = useState('');
 	const [editRating, setEditRating] = useState(0);
+
+	// Editing profile state
+	const [editProfile, setEditProfile] = useState(false);
+	const [editedEmail, setEditedEmail] = useState('');
+
+	const handleSaveProfile = () => {
+		updateEmail(_id, editedEmail);
+		setEditProfile(false);
+	};
 
 	useEffect(() => {
 		if (!_id) {
@@ -46,15 +57,35 @@ export default function ProfilePage() {
 		<Container size="lg" mt={100}>
 			<Group justify="space-between">
 				<Avatar size="xl" src="https://example.com/avatar.jpg" alt="User Avatar" />
-				<Link href="/">
-					<Button variant="outline">Back</Button>
-				</Link>
+				<Button.Group>
+					{editProfile ? (
+						<Button color="green" onClick={handleSaveProfile}>
+							Save
+						</Button>
+					) : (
+						<Button
+							onClick={() => {
+								setEditedEmail(email);
+								setEditProfile(true);
+							}}
+						>
+							Edit Profile
+						</Button>
+					)}
+					<Link href="/">
+						<Button variant="outline">Back</Button>
+					</Link>
+				</Button.Group>
 			</Group>
 
 			<Title weight={700} mt={30}>
 				@{username}
 			</Title>
-			<Text>{email}</Text>
+			{editProfile ? (
+				<TextInput value={editedEmail} placeholder="johndoe@email.com" onChange={(e) => setEditedEmail(e.currentTarget.value)} />
+			) : (
+				<Text>{email}</Text>
+			)}
 
 			<Text mt={30} fw="bold">
 				Your Reviews:

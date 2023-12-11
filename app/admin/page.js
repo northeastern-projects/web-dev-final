@@ -3,6 +3,7 @@
 import { useStore } from '@/contexts/store';
 import { Button, Container, Group, Table, Text, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -53,7 +54,9 @@ export default function AdminPage() {
 					<Table.Tbody>
 						{users.map((user, index) => (
 							<Table.Tr key={index}>
-								<Table.Td>{user.username}</Table.Td>
+								<Link href={`/profile/${user._id}`}>
+									<Table.Td>{user.username}</Table.Td>
+								</Link>
 								<Table.Td>{user.email}</Table.Td>
 								<Table.Td>
 									<Button color="blue" onClick={() => promoteUser(user._id)}>
@@ -82,7 +85,9 @@ export default function AdminPage() {
 					<Table.Tbody>
 						{admins.map((admin, index) => (
 							<Table.Tr key={index}>
-								<Table.Td>{admin.username}</Table.Td>
+								<Link href={`/profile/${admin._id}`}>
+									<Table.Td>{admin.username}</Table.Td>
+								</Link>
 								<Table.Td>{admin.email}</Table.Td>
 								<Table.Td>
 									<Button color="red" onClick={() => demoteAdmin(admin._id)}>

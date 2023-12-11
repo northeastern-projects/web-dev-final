@@ -1,4 +1,4 @@
-import { Group, Button, Title, TextInput, Menu, Drawer, Divider, Burger } from '@mantine/core';
+import { Group, Button, Title, TextInput, Menu, Drawer, Divider, Burger, Text } from '@mantine/core';
 import classes from './navbar.module.css';
 import Link from 'next/link';
 import { useStore } from '@/contexts/store';
@@ -63,13 +63,18 @@ export function Navbar() {
 		if (top) open();
 	}, [top]);
 
-	const navbarItems = <Title order={2}>Fountain Guru</Title>;
+	const navbarItems = (
+		<Group align="baseline">
+			<Title order={2}>Fountain Guru </Title>
+			<Text c="dimmed">Find you Favorite Fountain</Text>
+		</Group>
+	);
 	const navbarSearch = (
 		<>
 			{username && (
 				<Group gap={0}>
 					<TextInput w={350} placeholder="Find new location" value={searchTerm} onChange={(e) => setSearchTerm(e.currentTarget.value)} />
-					<Button onClick={handleSearch}>Add Location </Button>
+					<Button onClick={handleSearch}>Search</Button>
 				</Group>
 			)}
 		</>

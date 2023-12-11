@@ -11,7 +11,7 @@ import Review from './review';
 import { IconHeart, IconHeartBroken } from '@tabler/icons-react';
 
 export default function Map({ position, zoom }) {
-	const { username, _id, favorites } = useStore((state) => state.user);
+	const { username, _id, favorites, privileges } = useStore((state) => state.user);
 	const [locations, fetchLocations, addReview, addFavoriteLocation, removeFavoriteLocation] = useStore(
 		useShallow((state) => [state.locations, state.fetchLocations, state.addReview, state.addFavoriteLocation, state.removeFavoriteLocation])
 	);
@@ -91,7 +91,7 @@ export default function Map({ position, zoom }) {
 								) : (
 									<Text m={0}>No reviews for this location yet!</Text>
 								)}
-								{username && (
+								{username && privileges !== '*' && (
 									<Button
 										mt={15}
 										onClick={() => {

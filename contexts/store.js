@@ -43,6 +43,11 @@ export const useStore = create(
 			demoteAdmin: (userId) => {
 				store.updateUser(userId, { role: 'USER' }).then(get().fetchAll());
 			},
+			updateEmail: (userId, email) => {
+				store.updateUser(userId, { email }).then(() => {
+					set({ user: { ...get().user, email } });
+				});
+			},
 			fetchLocations: () => {
 				store.fetchLocations().then((locations) => set({ locations }));
 			},
