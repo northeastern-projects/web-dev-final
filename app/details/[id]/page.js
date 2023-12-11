@@ -1,7 +1,8 @@
 'use client';
 
+import Review from '@/components/home/review';
 import { useStore } from '@/contexts/store';
-import { Button, Container, Fieldset, Group, Text, Title } from '@mantine/core';
+import { Button, Container, Divider, Fieldset, Group, Stack, Text, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -45,18 +46,22 @@ export default function DetailsPage({ params }) {
 					<b>Coordinates:</b> {top.location.latitude}, {top.location.longitude}
 				</Text>
 			</Fieldset>
-			<Fieldset mt={50} legend="Saved locations at this position">
+			<Text mt={30} mb={15} fw="bold">
+				{' '}
+				Reviews at this location{' '}
+			</Text>
+			<>
 				{detailLocations.length === 0 && <Text>No saved locations at this position</Text>}
 				{detailLocations.length > 0 &&
 					detailLocations.map((location, index) => (
-						<Group key={index} justify="space-between">
-							<Text>
-								<b>{location.name}</b>
-							</Text>
-							<Text>{location.details?.reviews?.length || 0} reviews</Text>
-						</Group>
+						<Fieldset legend={location.name} key={index}>
+							{!location.details?.reviews || (location.details.reviews.length === 0 && <Text>No reviews</Text>)}
+							{location.details?.reviews &&
+								location.details.reviews.length > 0 &&
+								location.details.reviews.map((review, index) => <Review key={index} review={review} />)}
+						</Fieldset>
 					))}
-			</Fieldset>
+			</>
 		</Container>
 	);
 }

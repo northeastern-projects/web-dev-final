@@ -32,7 +32,7 @@ export default function AlienProfilePage({ params }) {
 			{privileges === '*' && <Text>{email}</Text>}
 
 			<Text mt={30} fw="bold">
-				Your Reviews:
+				User Reviews:
 			</Text>
 			{userReviews.length === 0 && <Text mt={15}>This user has no reviews!</Text>}
 			{userReviews.length > 0 && (
