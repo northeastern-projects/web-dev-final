@@ -56,7 +56,7 @@ export default function SignupPage() {
 					<Button fullWidth mt="xl" type="submit">
 						Sign up
 					</Button>
-					<Button variant="outline" onClick={router.push('/')} fullWidth>
+					<Button variant="outline" onClick={() => router.push('/')} fullWidth>
 						Go back
 					</Button>
 				</form>

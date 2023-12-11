@@ -52,7 +52,7 @@ export default function LoginPage() {
 					<Button fullWidth mt="xl" type="submit">
 						Sign in
 					</Button>
-					<Button variant="outline" onClick={router.push('/')} fullWidth>
+					<Button variant="outline" onClick={() => router.push('/')} fullWidth>
 						Go back
 					</Button>
 				</form>
