@@ -66,7 +66,7 @@ export function Navbar() {
 	const navbarItems = (
 		<Group align="baseline">
 			<Title order={2}>Fountain Guru </Title>
-			<Text c="dimmed">Find you Favorite Fountain</Text>
+			<Text c="dimmed">Find your Favorite Fountain</Text>
 		</Group>
 	);
 	const navbarSearch = (
